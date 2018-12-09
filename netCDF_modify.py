@@ -28,4 +28,8 @@ print( '-> file name is "%s" ' %file_name )
 print( '-> file path is "%s"' %file_path )
 print( '-> file name and path is "%s"' %file_name_path )
 
-nc_input_file = Dataset(file_name_path , 'r')
+nc_file = Dataset(file_name_path , 'r')
+
+for ivar in nc_file.variables.keys():
+
+    print(ivar)
