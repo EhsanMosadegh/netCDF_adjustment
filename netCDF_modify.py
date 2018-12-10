@@ -41,7 +41,7 @@ var_keys_array = np.array(var_keys)
 
 print('-> size of var_keys list is %s ' %var_keys_array.size)
 
-nc_var_array = np.array([])
+#nc_var_array = np.array([])
 
 for var_key in var_keys_array:
 
@@ -57,8 +57,17 @@ for var_key in var_keys_array:
 
 	else:
 
-		nc_var_array = nc_var[:,:,:]
+		#print('-> for %s variable, shape is %s and dtype is %s'  %( nc_var.name , nc_var.shape , nc_var.dtype))
 
-		print('-> shape of %s is %s'  %( nc_var.name , nc_var_array.shape))
+		datatype = nc_var.dtype
+
+		if datatype == 'float32' :
+
+			nc_var[:] = 0.000
+
+		else:
+
+			print('-> dtype is NOT "float32", \
+			check the dtype for %s '  %nc_var.name  )
 
 
