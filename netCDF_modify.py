@@ -32,9 +32,12 @@ print( '-> file name and path is "%s" ' %file_name_path )
 
 nc_file = Dataset(file_name_path , 'r')
 
+nc_file_modified = nc_file.copy()
+
 var_keys = []
 
-for ivar in nc_file.variables.keys():
+for ivar in nc_file_modified.variables.keys():
+
 	var_keys.append(ivar)
 
 var_keys_array = np.array(var_keys)
@@ -47,7 +50,7 @@ for var_key in var_keys_array:
 
 	print('-> doing for %s'  %var_key)
 	
-	nc_var = nc_file.variables[var_key]
+	nc_var = nc_file_modified.variables[var_key]
 	
 	if nc_var == 'TFLAG':
 
