@@ -31,12 +31,31 @@ print( '-> file name and path is "%s"' %file_name_path )
 
 nc_file = Dataset(file_name_path , 'r')
 
-var_keys = np.array([])
-
-var_keys = nc_file.variables.keys()
-
-print('-> size of var_keys list is %s' %var_keys.size)
+var_keys = []
 
 for ivar in nc_file.variables.keys():
+	var_keys.append(ivar)
 
-    print(ivar)
+var_keys_array = np.array(var_keys)
+
+print('-> size of var_keys list is %s' %var_keys_array.size)
+
+nc_var_array = np.array([])
+
+for ivar in var_keys_array:
+	
+	nc_var = nc_file.variables[ivar]
+	
+	if nc_var == 'TFLAG':
+
+		print('-> VAR is TFLAG, we do not need it, wee pass')
+
+		pass
+
+	else:
+
+		nc_var_array = nc_var[:,:,:]
+
+		print('-> shape of %s is %s'  %( nc_var , nc_var_array.shape))
+
+
