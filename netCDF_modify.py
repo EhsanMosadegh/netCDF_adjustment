@@ -43,9 +43,11 @@ print('-> size of var_keys list is %s ' %var_keys_array.size)
 
 nc_var_array = np.array([])
 
-for ivar in var_keys_array:
+for var_key in var_keys_array:
+
+	print('-> doing for %s'  %var_key)
 	
-	nc_var = nc_file.variables[ivar]
+	nc_var = nc_file.variables[var_key]
 	
 	if nc_var == 'TFLAG':
 
@@ -57,6 +59,6 @@ for ivar in var_keys_array:
 
 		nc_var_array = nc_var[:,:,:]
 
-		print('-> shape of %s is %s'  %( nc_var , nc_var_array.shape))
+		print('-> shape of %s is %s'  %( nc_var.name , nc_var_array.shape))
 
 
