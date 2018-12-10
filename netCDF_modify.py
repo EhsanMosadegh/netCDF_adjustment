@@ -4,6 +4,7 @@
 # Created on Sat Dec  8 20:17:37 2018
 #
 # author: ehsan (ehsanm@dri.edu)
+# purpose: 
 ########################################
 
 from netCDF4 import Dataset
