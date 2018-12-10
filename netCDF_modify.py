@@ -3,10 +3,11 @@
 ########################################
 # Created on Sat Dec  8 20:17:37 2018
 #
-#@author: ehsan
+# author: ehsan (ehsanm@dri.edu)
 ########################################
 
 from netCDF4 import Dataset
+import numpy as np
 
 ########################################
 
@@ -29,6 +30,12 @@ print( '-> file path is "%s"' %file_path )
 print( '-> file name and path is "%s"' %file_name_path )
 
 nc_file = Dataset(file_name_path , 'r')
+
+var_keys = np.array([])
+
+var_keys = nc_file.variables.keys()
+
+print('-> size of var_keys list is %s' %var_keys.size)
 
 for ivar in nc_file.variables.keys():
 
