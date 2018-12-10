@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ########################################
 # Created on Sat Dec  8 20:17:37 2018
 #
@@ -26,8 +26,8 @@ file_path = '/Users/ehsan/Documents/PYTHON_CODES/netCDF_modify/inputs/'
 file_name_path = file_path+file_name
 
 print( '-> file name is "%s" ' %file_name )
-print( '-> file path is "%s"' %file_path )
-print( '-> file name and path is "%s"' %file_name_path )
+print( '-> file path is "%s" ' %file_path )
+print( '-> file name and path is "%s" ' %file_name_path )
 
 nc_file = Dataset(file_name_path , 'r')
 
@@ -38,7 +38,7 @@ for ivar in nc_file.variables.keys():
 
 var_keys_array = np.array(var_keys)
 
-print('-> size of var_keys list is %s' %var_keys_array.size)
+print('-> size of var_keys list is %s ' %var_keys_array.size)
 
 nc_var_array = np.array([])
 
@@ -48,7 +48,7 @@ for ivar in var_keys_array:
 	
 	if nc_var == 'TFLAG':
 
-		print('-> VAR is TFLAG, we do not need it, wee pass')
+		print('-> VAR is TFLAG, we do not need it, we pass')
 
 		pass
 
