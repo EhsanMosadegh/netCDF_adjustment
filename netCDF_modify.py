@@ -4,7 +4,7 @@
 # Created on Sat Dec  8 20:17:37 2018
 #
 # author: ehsan (ehsanm@dri.edu)
-# purpose: 
+# purpose:
 ########################################
 
 from netCDF4 import Dataset
@@ -32,45 +32,42 @@ print( '-> file name and path is "%s" ' %file_name_path )
 
 nc_file = Dataset(file_name_path , 'r')
 
-nc_file_modified = nc_file.copy()
+#nc_file_modified = nc_file.copy()
 
 var_keys = []
 
-for ivar in nc_file_modified.variables.keys():
+for ivar in nc_file.variables.keys():
 
 	var_keys.append(ivar)
 
 var_keys_array = np.array(var_keys)
 
-print('-> size of var_keys list is %s ' %var_keys_array.size)
+print('-> size of var_keys list is : %s ' %var_keys_array.size)
 
 #nc_var_array = np.array([])
 
 for var_key in var_keys_array:
 
-	print('-> doing for %s'  %var_key)
-	
-	nc_var = nc_file_modified.variables[var_key]
-	
-	if nc_var == 'TFLAG':
+	print('-> doing for %s ...'  %var_key)
 
-		print('-> VAR is TFLAG, we do not need it, we pass')
+	nc_var = nc_file.variables[var_key]
 
-		pass
+	if nc_var.name == 'TFLAG' :
 
-	else:
+		print('-> VAR is TFLAG, we do not need it, we pass!')
+
+		continue
 
 		#print('-> for %s variable, shape is %s and dtype is %s'  %( nc_var.name , nc_var.shape , nc_var.dtype))
 
-		datatype = nc_var.dtype
+	datatype = nc_var.dtype
 
-		if datatype == 'float32' :
+	if datatype == 'float32' :
 
-			nc_var[:] = 0.000
+		nc_var[:] = 0.000
 
-		else:
+	else:
 
-			print('-> dtype is NOT "float32", \
-			check the dtype for %s '  %nc_var.name  )
+		print('-> dtype is NOT "float32", check the dtype for %s '  %nc_var.name  )
 
 
