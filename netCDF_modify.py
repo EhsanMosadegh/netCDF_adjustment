@@ -60,6 +60,8 @@ for var_key in var_keys_array :
 
 		#print('-> for %s variable, shape is %s and dtype is %s'  %( nc_var.name , nc_var.shape , nc_var.dtype))
 
+	print('-> max value inside "%s" array is = %s'  %( var_key , np.amax( nc_var[:] ) ) )
+
 	datatype = nc_var.dtype
 
 	if datatype == 'float32' :
@@ -70,8 +72,21 @@ for var_key in var_keys_array :
 
 		print('-> dtype is NOT "float32", check the dtype for %s '  %nc_var.name  )
 
+nc_file.close()
+print('-> closing netcdf file now!')
+
 print('--------------------------------------------------------------')
 print('-> doing QA check on arrays ...')
+
+nc_file = Dataset(file_name_path , 'r')
+
+var_keys = []
+
+for ivar in nc_file.variables.keys():
+
+	var_keys.append(ivar)
+
+var_keys_array = np.array(var_keys)
 
 for var_key in var_keys_array :
 
@@ -86,3 +101,4 @@ for var_key in var_keys_array :
 		print( '-> NOTE: there are still non-zero elements for (%s), go back and check!' %var_key)
 
 nc_file.close()
+print('-> closing netcdf file now!')
