@@ -30,7 +30,7 @@ print( '-> file name is "%s" ' %file_name )
 print( '-> file path is "%s" ' %file_path )
 print( '-> file name and path is "%s" ' %file_name_path )
 
-nc_file = Dataset(file_name_path , 'r')
+nc_file = Dataset(file_name_path , 'r+')
 
 #nc_file_modified = nc_file.copy()
 
@@ -46,7 +46,7 @@ print('-> size of var_keys list is : %s ' %var_keys_array.size)
 
 #nc_var_array = np.array([])
 
-for var_key in var_keys_array:
+for var_key in var_keys_array :
 
 	print('-> doing for %s ...'  %var_key)
 
@@ -54,7 +54,7 @@ for var_key in var_keys_array:
 
 	if nc_var.name == 'TFLAG' :
 
-		print('-> VAR is TFLAG, we do not need it, we pass!')
+		print('-> VAR is TFLAG, we do not need it, so we pass!')
 
 		continue
 
@@ -69,5 +69,32 @@ for var_key in var_keys_array:
 	else:
 
 		print('-> dtype is NOT "float32", check the dtype for %s '  %nc_var.name  )
+
+print('--------------------------------------------------------------')
+print('-> doing QA check on arrays ...')
+
+for var_key in var_keys_array :
+
+	var_max = np.amax( nc_file.variables[ var_key ] ) 
+
+	if var_max == 0 :
+
+		print( '-> QA checked, all elements inside %s array are now zero! ' %var_key)
+
+	else:
+
+		print( '-> NOTE: there are still non-zero elements for %s, go back and check!' %var_key)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
