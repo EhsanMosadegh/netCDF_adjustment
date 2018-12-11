@@ -79,22 +79,10 @@ for var_key in var_keys_array :
 
 	if var_max == 0 :
 
-		print( '-> QA checked, all elements inside %s array are now zero! ' %var_key)
+		print( '-> QA checked, all elements inside (%s) array are now zero! ' %var_key)
 
 	else:
 
-		print( '-> NOTE: there are still non-zero elements for %s, go back and check!' %var_key)
+		print( '-> NOTE: there are still non-zero elements for (%s), go back and check!' %var_key)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+nc_file.close()
