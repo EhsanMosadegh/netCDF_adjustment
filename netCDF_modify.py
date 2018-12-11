@@ -20,7 +20,7 @@ output_dir = work_dir+'/outputs'
 
 ########################################
 
-file_name = 'BCON_v521_test_for_v53_profile'
+file_name = 'ICON_v521_test_for_v53_profile'
 
 file_path = '/Users/ehsan/Documents/PYTHON_CODES/netCDF_modify/inputs/'
 
@@ -48,7 +48,7 @@ print('-> size of var_keys list is : %s ' %var_keys_array.size)
 
 for var_key in var_keys_array :
 
-	print('-> doing for %s ...'  %var_key)
+	print('-> 0-ing the values for %s ...'  %var_key)
 
 	nc_var = nc_file.variables[var_key]
 
