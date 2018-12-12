@@ -20,7 +20,9 @@ output_dir = work_dir+'/outputs'
 
 ########################################
 
-file_name = 'ICON_v521_test_for_v53_profile'
+nc_value = 0.0000000001
+
+file_name = 'BCON_v521_test_for_v53_profile'
 
 file_path = '/Users/ehsan/Documents/PYTHON_CODES/netCDF_modify/inputs/'
 
@@ -29,6 +31,7 @@ file_name_path = file_path+file_name
 print( '-> file name is "%s" ' %file_name )
 print( '-> file path is "%s" ' %file_path )
 print( '-> file name and path is "%s" ' %file_name_path )
+print( '-> nc values was set to min of = %s' %nc_value)
 
 nc_file = Dataset(file_name_path , 'r+')
 
@@ -66,7 +69,7 @@ for var_key in var_keys_array :
 
 	if datatype == 'float32' :
 
-		nc_var[:] = 0.000
+		nc_var[:] = nc_value
 
 	else:
 
@@ -92,13 +95,14 @@ for var_key in var_keys_array :
 
 	var_max = np.amax( nc_file.variables[ var_key ] ) 
 
-	if var_max == 0 :
+	if var_max == nc_value :
 
 		print( '-> QA checked, all elements inside (%s) array are now zero! ' %var_key)
 
 	else:
 
-		print( '-> NOTE: there are still non-zero elements for (%s), go back and check!' %var_key)
+		print( '-> NOTE: for VAR: %s max value is = %s, but our favorite value is = %s, go back and check!' %( var_key , var_max , nc_value )
 
 nc_file.close()
+
 print('-> closing netcdf file now!')
