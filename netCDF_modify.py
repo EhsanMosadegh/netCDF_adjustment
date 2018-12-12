@@ -20,7 +20,7 @@ output_dir = work_dir+'/outputs'
 
 ########################################
 
-nc_value = 0.0000000001
+my_value = 1e-10
 
 file_name = 'BCON_v521_test_for_v53_profile'
 
@@ -31,7 +31,7 @@ file_name_path = file_path+file_name
 print( '-> file name is "%s" ' %file_name )
 print( '-> file path is "%s" ' %file_path )
 print( '-> file name and path is "%s" ' %file_name_path )
-print( '-> nc values was set to min of = %s' %nc_value)
+print( '-> nc values will be set to min of = %s' %my_value)
 
 nc_file = Dataset(file_name_path , 'r+')
 
@@ -69,7 +69,7 @@ for var_key in var_keys_array :
 
 	if datatype == 'float32' :
 
-		nc_var[:] = nc_value
+		nc_var[:] = my_value
 
 	else:
 
@@ -93,19 +93,19 @@ var_keys_array = np.array(var_keys)
 
 for var_key in var_keys_array :
 
-	var_max = np.amax( nc_file.variables[ var_key ] ) 
+	var_max = np.amax( nc_file.variables[ var_key ] )
 
 	var_min = np.amin( nc_file.variables[ var_key ] )
 
 	print('-> for VAR = %s min is : %s and max is %s '  %( var_key , var_min , var_max) )
 
-	if var_max == nc_value :
+	if var_max - my_value <= 1e-10 :
 
-		print( '-> QA checked, all elements inside (%s) array are now zero! ' %var_key)
+		print( '-> QA checked, all elements inside (%s) array are now set to : %s! ' %( var_key , my_value))
 
 	else:
 
-		print( '-> NOTE: for VAR: %s max value is = %s, but our favorite value is = %s, go back and check!' %( var_key , var_max , nc_value )
+		print( '-> NOTE: for VAR: %s max value is = %s, but our favorite value is = %s, go back and check!' %( var_key , var_max , my_value ))
 
 nc_file.close()
 print('-> closing netcdf file now!')
