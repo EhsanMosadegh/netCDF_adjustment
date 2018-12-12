@@ -95,6 +95,10 @@ for var_key in var_keys_array :
 
 	var_max = np.amax( nc_file.variables[ var_key ] ) 
 
+	var_min = np.amin( nc_file.variables[ var_key ] )
+
+	print('-> for VAR = %s min is : %s and max is %s '  %( var_key , var_min , var_max) )
+
 	if var_max == nc_value :
 
 		print( '-> QA checked, all elements inside (%s) array are now zero! ' %var_key)
@@ -104,5 +108,4 @@ for var_key in var_keys_array :
 		print( '-> NOTE: for VAR: %s max value is = %s, but our favorite value is = %s, go back and check!' %( var_key , var_max , nc_value )
 
 nc_file.close()
-
 print('-> closing netcdf file now!')
