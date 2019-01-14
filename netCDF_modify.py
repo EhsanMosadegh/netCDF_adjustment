@@ -22,7 +22,7 @@ output_dir = work_dir+'/outputs'
 
 my_value = 1e-10
 
-file_name = 'BCON_v521_test_for_v53_profile'
+file_name = 'ICON_v521_test_for_v53_profile'
 
 file_path = '/Users/ehsan/Documents/PYTHON_CODES/netCDF_modify/inputs/'
 
