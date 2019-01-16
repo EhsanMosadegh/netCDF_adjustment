@@ -22,7 +22,7 @@ output_dir = work_dir+'/outputs/METCRO2D_output/'
 
 ########################################
 
-favorite_value = 0.001
+favorite_value = 1.0
 nc_variable = 'LAI'
 
 input_file_name = 'METCRO2D_160711.nc'
@@ -52,8 +52,7 @@ for itstep in range(0,tstep_Ubound,1):
 
                 if ( LAI_VAR[ itstep , ilay , irow , icol ] == 0 ):
 
-                    print( '-> there are zero valus in %s' %(input_file_name) )
-                    print( '-> we will replace zero values with %s' %(favorite_value) )
+                    print( '-> there are zero valus at TSTEP=%s, LAY=%s, ROW=%s, COL=%s, and we will replace zero values with %s' %(itstep,ilay,irow,icol,favorite_value) )
 
                     LAI_VAR[ itstep , ilay , irow , icol ] = favorite_value
 
