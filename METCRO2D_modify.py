@@ -12,6 +12,7 @@ import numpy as np
 import os
 
 ########################################
+# set paths
 
 work_dir = '/Users/ehsan/Documents/Python_projects/netCDF_modify'
 repository_name = 'netCDF_adjustment'
@@ -24,9 +25,62 @@ output_dir = work_dir+'/outputs/METCRO2D_output/'
 
 favorite_value = 1e-30
 nc_variable = 'LAI'
+yr = '16'
 
-input_file_name = 'METCRO2D_160711.nc'
-input_file_full_path = os.path.join( input_dir , input_file_name)
+########################################
+
+month_list = [ '07' , '08' , '09' , '10' , '11' ]
+
+for imonth in month_list :
+
+    if ( imonth == '07' or imonth == '08' or imonth == '10' ) :
+
+        for iday in range(1,31) :
+
+            if ( iday <= 9 ) :
+
+                iday = '0'+str(iday)
+
+            else:
+
+                iday = str(iday)
+
+            date_tag = yr+imonth+iday
+
+    elif ( imonth == '09' or imonth == '11') :
+
+        for iday in range(1,30) :
+
+            if ( iday <= 9 ) :
+
+                iday = '0'+str(iday)
+
+            else:
+
+                iday = str(iday)
+
+            date_tag = yr+imonth+iday
+
+    else:
+
+        print('-> month not used, check month number')
+
+
+            print('-> copy METCRO2D file...')
+
+
+
+
+
+
+
+
+
+
+
+
+            input_file_name = 'METCRO2D_160711.nc'
+            input_file_full_path = os.path.join( input_dir , input_file_name)
 
 # read the netcdf file
 nc_file = Dataset( input_file_full_path ,'r+')
