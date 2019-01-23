@@ -22,7 +22,7 @@ output_dir = work_dir+'/outputs/METCRO2D_output/'
 
 ########################################
 
-favorite_value = 1.0
+favorite_value = 1e-30
 nc_variable = 'LAI'
 
 input_file_name = 'METCRO2D_160711.nc'
