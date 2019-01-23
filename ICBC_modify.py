@@ -20,11 +20,11 @@ output_dir = work_dir+'/outputs'
 
 ########################################
 
-my_value = 1e-10
+my_value = 1e-30
 
-file_name = 'ICON_v521_test_for_v53_profile'
+file_name = 'BCON_v521_test_for_v53_profile'
 
-file_path = '/Users/ehsan/Documents/PYTHON_CODES/netCDF_modify/inputs/'
+file_path = '/Users/ehsan/Documents/Python_projects/netCDF_modify/inputs/'
 
 file_name_path = file_path+file_name
 
@@ -101,11 +101,11 @@ for var_key in var_keys_array :
 
 	if var_max - my_value <= 1e-10 :
 
-		print( '-> QA checked, all elements inside (%s) array are now set to : %s! ' %( var_key , my_value))
+		print( '-> QA checked, all elements inside (%s) array are now set to : %s ' %( var_key , my_value))
 
 	else:
 
-		print( '-> NOTE: for VAR: %s max value is = %s, but our favorite value is = %s, go back and check!' %( var_key , var_max , my_value ))
+		print( '-> NOTE: for VAR: %s max value is = %s, but our favorite value is = %s, go back and check.' %( var_key , var_max , my_value ))
 
 nc_file.close()
-print('-> closing netcdf file now!')
+print('-> closing netcdf file now.')
