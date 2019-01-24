@@ -10,16 +10,15 @@
 from netCDF4 import Dataset
 import numpy as np
 import os
+from shutil import copyfile
 
 ########################################
 # function
 
-def metcro2d_modify ( met_file_full_path ):
-
-        print('-> copy the netcdf file')
+def metcro2d_modify ( met_file_copied ):
 
         # read the copied netcdf file
-        nc_file = Dataset( met_file_full_path ,'r+')
+        nc_file = Dataset( met_file_copied ,'r+')
 
         LAI_VAR = nc_file.variables[ nc_variable ]
 
@@ -56,11 +55,11 @@ def metcro2d_modify ( met_file_full_path ):
 # QA to check if there is still zero:
 # select a subset of LAY array
 
-def metcro2d_QA (met_file_full_path):
+def metcro2d_QA ( met_file_copied ):
 
         print('-> doing the QA to check if there is any zero left...')
 
-        nc_file = Dataset( met_file_full_path ,'r')
+        nc_file = Dataset( met_file_copied ,'r')
 
         LAI_VAR = nc_file.variables[ nc_variable ]
 
@@ -116,19 +115,28 @@ for imonth in month_list :
 
             input_file_name = 'METCRO2D_'+date_tag+'.nc'
 
-            print('-> input file is %s' %input_file_name)
+            print('-> processing file: %s' %input_file_name)
 
             input_file_full_path = os.path.join( input_dir , input_file_name)
 
             if ( os.path.isfile(input_file_full_path) == False ):
 
-                print('-> %s not available, go to the next file' %(input_file_name) )
+                print('-> %s NOT available, go to the next file' %(input_file_name) )
                 continue
 
             else:
+
                 print('-> %s exists, and will be modified' %( input_file_name) )
-                #metcro2d_modify( input_file_full_path)
-                #metcro2d_QA ( input_file_full_path)
+
+                print('-> copy the met file')
+
+                met_file_copied = input_file_full_path+'.copied'
+
+                copyfile( input_file_full_path , met_file_copied )
+
+                metcro2d_modify( met_file_copied)
+
+                metcro2d_QA ( met_file_copied)
 
 
 
@@ -148,19 +156,28 @@ for imonth in month_list :
 
             input_file_name = 'METCRO2D_'+date_tag+'.nc'
 
-            print('-> input file is %s' %input_file_name)
+            print('-> processing file: %s' %input_file_name)
 
             input_file_full_path = os.path.join( input_dir , input_file_name)
 
             if ( os.path.isfile(input_file_full_path) == False ):
 
-                print('-> %s not available, go to the next file' %(input_file_name) )
+                print('-> %s NOT available, go to the next file' %(input_file_name) )
                 continue
 
             else:
+
                 print('-> %s exists, and will be modified' %( input_file_name) )
-                #metcro2d_modify( input_file_full_path)
-                #metcro2d_QA ( input_file_full_path)
+
+                print('-> copy the met file')
+
+                met_file_copied = input_file_full_path+'.copied'
+
+                copyfile( input_file_full_path , met_file_copied )
+
+                metcro2d_modify( met_file_copied)
+
+                metcro2d_QA ( met_file_copied)
 
     else:
 
