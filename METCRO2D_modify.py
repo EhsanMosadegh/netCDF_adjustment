@@ -95,7 +95,7 @@ if ( platform == 'MAC') :
 
 elif ( platform == 'HPC'):
 
-    xxx
+    work_dir = '/data/gpfs/assoc/amg/MCIP_4.3/mcip_output/USFS_WRF_Tahoe_MCIPout'
 
 else:
 
