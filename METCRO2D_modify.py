@@ -14,7 +14,7 @@ from shutil import copyfile
 
 ########################################
 
-platform = 'MAC' # [MAC, HPC]
+platform = 'HPC' # [MAC, HPC]
 favorite_value = 1e-30
 nc_variable = 'LAI'
 yr = '16'
@@ -48,7 +48,7 @@ def metcro2d_modify ( met_file_copied ):
 
                         if ( LAI_VAR[ itstep , ilay , irow , icol ] == 0 ):
 
-                            print( '-> there are zero valus at TSTEP=%s, LAY=%s, ROW=%s, COL=%s, and we will replace zero values with %s' %(itstep,ilay,irow,icol,favorite_value) )
+                            #print( '-> there are zero valus at TSTEP=%s, LAY=%s, ROW=%s, COL=%s, and we will replace zero values with %s' %(itstep,ilay,irow,icol,favorite_value) )
 
                             LAI_VAR[ itstep , ilay , irow , icol ] = favorite_value
 
@@ -96,9 +96,9 @@ if ( platform == 'MAC') :
 elif ( platform == 'HPC') :
 
     work_dir = '/data/gpfs/assoc/amg/MCIP_4.3/mcip_output/USFS_WRF_Tahoe_MCIPout'
-    repository_name = 'netCDF_adjustment'
+    repository_name = '/netCDF_adjustment'
     script_dir = work_dir+repository_name
-    input_dir = work_dir
+    input_dir = work_dir+repository_name
     output_dir = work_dir
 
 else:
@@ -106,6 +106,11 @@ else:
     print('-> ERROR: platform is not set, exiting...')
     raise SystemExit()
 
+print('-> current directory is: "%s"' %(os.getcwd()) )
+print('-> changing directory to where METCRO2D files are...')
+os.chdir( work_dir )
+print('-> now we are at:')
+print('-> %s' %( os.getcwd() ))
 
 ########################################
 
