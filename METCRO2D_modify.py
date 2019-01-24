@@ -129,7 +129,7 @@ for imonth in month_list :
 
             date_tag = yr+imonth+iday
 
-            input_file_name = 'METCRO2D_'+date_tag+'.nc'
+            input_file_name = 'METCRO2D_'+date_tag
 
             print('===> processing file: %s' %input_file_name)
 
@@ -170,7 +170,7 @@ for imonth in month_list :
 
             date_tag = yr+imonth+iday
 
-            input_file_name = 'METCRO2D_'+date_tag+'.nc'
+            input_file_name = 'METCRO2D_'+date_tag
 
             print('===> processing file: %s' %input_file_name)
 
