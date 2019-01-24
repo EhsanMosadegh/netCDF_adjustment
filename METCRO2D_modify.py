@@ -93,9 +93,13 @@ if ( platform == 'MAC') :
     input_dir = work_dir+'/inputs/METCRO2D_inputs/'
     output_dir = work_dir+'/outputs/METCRO2D_output/'
 
-elif ( platform == 'HPC'):
+elif ( platform == 'HPC') :
 
     work_dir = '/data/gpfs/assoc/amg/MCIP_4.3/mcip_output/USFS_WRF_Tahoe_MCIPout'
+    repository_name = 'netCDF_adjustment'
+    script_dir = work_dir+repository_name
+    input_dir = work_dir
+    output_dir = work_dir
 
 else:
 
