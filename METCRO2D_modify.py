@@ -13,6 +13,13 @@ import os
 from shutil import copyfile
 
 ########################################
+
+platform = 'MAC' # [MAC, HPC]
+favorite_value = 1e-30
+nc_variable = 'LAI'
+yr = '16'
+
+########################################
 # function
 
 def metcro2d_modify ( met_file_copied ):
@@ -78,18 +85,23 @@ def metcro2d_QA ( met_file_copied ):
 ########################################
 # set paths
 
-work_dir = '/Users/ehsan/Documents/Python_projects/netCDF_modify'
-repository_name = 'netCDF_adjustment'
+if ( platform == 'MAC') :
 
-script_dir = work_dir+'github/'+repository_name
-input_dir = work_dir+'/inputs/METCRO2D_inputs/'
-output_dir = work_dir+'/outputs/METCRO2D_output/'
+    work_dir = '/Users/ehsan/Documents/Python_projects/netCDF_modify'
+    repository_name = 'netCDF_adjustment'
+    script_dir = work_dir+'github/'+repository_name
+    input_dir = work_dir+'/inputs/METCRO2D_inputs/'
+    output_dir = work_dir+'/outputs/METCRO2D_output/'
 
-########################################
+elif ( platform == 'HPC'):
 
-favorite_value = 1e-30
-nc_variable = 'LAI'
-yr = '16'
+    xxx
+
+else:
+
+    print('-> ERROR: platform is not set, exiting...')
+    raise SystemExit()
+
 
 ########################################
 
@@ -115,9 +127,9 @@ for imonth in month_list :
 
             input_file_name = 'METCRO2D_'+date_tag+'.nc'
 
-            print('-> processing file: %s' %input_file_name)
+            print('===> processing file: %s' %input_file_name)
 
-            input_file_full_path = os.path.join( input_dir , input_file_name)
+            input_file_full_path = os.path.join( input_dir , input_file_name )
 
             if ( os.path.isfile(input_file_full_path) == False ):
 
@@ -128,7 +140,7 @@ for imonth in month_list :
 
                 print('-> %s exists, and will be modified' %( input_file_name) )
 
-                print('-> copy the met file')
+                print('-> copy the met file...')
 
                 met_file_copied = input_file_full_path+'.copied'
 
@@ -156,9 +168,9 @@ for imonth in month_list :
 
             input_file_name = 'METCRO2D_'+date_tag+'.nc'
 
-            print('-> processing file: %s' %input_file_name)
+            print('===> processing file: %s' %input_file_name)
 
-            input_file_full_path = os.path.join( input_dir , input_file_name)
+            input_file_full_path = os.path.join( input_dir , input_file_name )
 
             if ( os.path.isfile(input_file_full_path) == False ):
 
@@ -169,7 +181,7 @@ for imonth in month_list :
 
                 print('-> %s exists, and will be modified' %( input_file_name) )
 
-                print('-> copy the met file')
+                print('-> copy the met file...')
 
                 met_file_copied = input_file_full_path+'.copied'
 
