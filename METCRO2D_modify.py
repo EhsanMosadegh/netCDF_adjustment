@@ -98,7 +98,7 @@ elif ( platform == 'HPC') :
     work_dir = '/data/gpfs/assoc/amg/MCIP_4.3/mcip_output/USFS_WRF_Tahoe_MCIPout'
     repository_name = '/netCDF_adjustment'
     script_dir = work_dir+repository_name
-    input_dir = work_dir
+    input_dir = work_dir  # point to where METCRO2D files are
     #output_dir = work_dir
 
 else:
@@ -107,10 +107,10 @@ else:
     raise SystemExit()
 
 print('-> current directory is: "%s"' %(os.getcwd()) )
-print('-> changing directory to where METCRO2D files are...')
-os.chdir( work_dir )
-print('-> now we are at:')
-print('-> %s' %( os.getcwd() ))
+#print('-> changing directory to where METCRO2D files are...')
+#os.chdir( work_dir )
+#print('-> now we are at:')
+#print('-> %s' %( os.getcwd() ))
 
 ########################################
 
