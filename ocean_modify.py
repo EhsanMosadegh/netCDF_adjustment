@@ -13,6 +13,11 @@ from shutil import copyfile
 import os
 
 ##########
+# set favorite parameters
+tstep = 0
+lay = 0
+favoriteValue = 0.0
+
 # read the file
 inputFileDirectory = '/Users/ehsan/Documents/Python_projects/netCDF_modify/inputs/'
 fileBaseName = 'ocean_file_CA_WRF_1km_original'
@@ -38,10 +43,6 @@ oceanFile = Dataset( oceanFileCopied , 'r+')  # r+ enables inplace modification
 # define variables
 oceanVarList = ['SURF' , 'OPEN']
 
-# set fix parameters
-tstep = 0
-lay = 0
-
 # loop through row and columns
 for listVar in oceanVarList:
     oceanVar = oceanFile.variables[listVar]
@@ -55,7 +56,7 @@ for listVar in oceanVarList:
 
             oceanCellValue = oceanVar[ tstep, lay, row, col ]
 
-            if ( oceanCellValue == 0.0 ):
+            if ( oceanCellValue == favoriteValue ):
                 continue
 
             else:
