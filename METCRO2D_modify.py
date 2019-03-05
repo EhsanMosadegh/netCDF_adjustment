@@ -14,10 +14,11 @@ from shutil import copyfile
 
 ########################################
 
-platform = 'HPC' # [MAC, HPC]
-favorite_value = 1e-30
+platform = 'MAC' # [MAC, HPC]
+favorite_value = 0.1
 nc_variable = 'LAI'
 yr = '16'
+copyNameTag = '_LAIpoint1'
 
 ########################################
 # function
@@ -90,7 +91,7 @@ if ( platform == 'MAC') :
     work_dir = '/Users/ehsan/Documents/Python_projects/netCDF_modify'
     repository_name = 'netCDF_adjustment'
     script_dir = work_dir+'github/'+repository_name
-    input_dir = work_dir+'/inputs/METCRO2D_inputs/'
+    input_dir = work_dir+'/inputs/'
     output_dir = work_dir+'/outputs/METCRO2D_output/'
 
 elif ( platform == 'HPC') :
@@ -151,7 +152,7 @@ for imonth in month_list :
 
                 print('-> copy the met file...')
 
-                met_file_copied = input_file_full_path+'.copied'
+                met_file_copied = input_file_full_path + copyNameTag
 
                 copyfile( input_file_full_path , met_file_copied )
 
@@ -192,7 +193,7 @@ for imonth in month_list :
 
                 print('-> copy the met file...')
 
-                met_file_copied = input_file_full_path+'.copied'
+                met_file_copied = input_file_full_path + copyNameTag
 
                 copyfile( input_file_full_path , met_file_copied )
 
