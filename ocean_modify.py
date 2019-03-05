@@ -45,7 +45,7 @@ lay = 0
 # loop through row and columns
 for listVar in oceanVarList:
     oceanVar = oceanFile.variables[listVar]
-    print('-> doing for: %s' %(listVar))
+    print('-> modifying values to zero for: %s' %(listVar))
 
     rowUpBound = oceanVar.shape[2]
     colUpBound = oceanVar.shape[3]
@@ -59,7 +59,8 @@ for listVar in oceanVarList:
                 continue
 
             else:
-                print('-> for row:%s, col:%s, zero replaced %s' %( row,col,oceanCellValue) )
-                oceanCellValue = 0.0
+                print('-> for row:%s, col:%s, zero replaced %s' %( row, col, oceanCellValue) )
+                oceanVar[ tstep, lay, row, col ] = 0.0
+                
 print('-> end of program!')
 oceanFile.close()
