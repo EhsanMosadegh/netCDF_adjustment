@@ -1,28 +1,65 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Feb  7 17:15:23 2019
+Created on Mon Mar  4 12:18:28 2019
 
-@author: ehsan
+@author: ehsan (ehsanm@dri.edu)
 """
-##################
+
+##########
 
 from netCDF4 import Dataset
-import numpy as np
-import os
 from shutil import copyfile
+import os
 
-##################
-nc_variable_list = ['SURF' , 'OPEN']
+##########
+# read the file
+inputFileDirectory = '/Users/ehsan/Documents/Python_projects/netCDF_modify/inputs/'
+fileBaseName = 'ocean_file_CA_WRF_1km_original'
+fileFullName = fileBaseName+'.ncf'
 
+fileNameFullPath = inputFileDirectory + fileFullName
+print('-> file name full path is: %s' %(fileNameFullPath) )
 
-nc_file_name = 'ocean_file_CA_WRF_1km.ncf'
-nc_file_path = '/Users/ehsan/Documents/Python_projects/netCDF_modify/inputs/'
-nc_file_full_path = nc_file_path + nc_file_name
+if ( os.path.isfile(fileNameFullPath) == False):
+    print('-> input file not available, or path is incorrect!')
+    raise SystemExit()
 
-ocean_file_copied = nc_file_full_path + '.copied'
+# copy the file
+oceanFileCopiedName = fileBaseName + '.zero' + '.ncf'
+oceanFileCopiedPath = inputFileDirectory
+oceanFileCopied = oceanFileCopiedPath + oceanFileCopiedName
 
-copyfile( nc_file_full_path , ocean_file_copied )
+copyfile( fileNameFullPath , oceanFileCopied )
 
-input_file = Dataset( ocean_file_copied, 'r+')
+# read copied netCDF file
+oceanFile = Dataset( oceanFileCopied , 'r+')  # r+ enables inplace modification
 
+# define variables
+oceanVarList = ['SURF' , 'OPEN']
+
+# set fix parameters
+tstep = 0
+lay = 0
+
+# loop through row and columns
+for listVar in oceanVarList:
+    oceanVar = oceanFile.variables[listVar]
+    print('-> doing for: %s' %(listVar))
+
+    rowUpBound = oceanVar.shape[2]
+    colUpBound = oceanVar.shape[3]
+
+    for row in range(0,rowUpBound,1):
+        for col in range(0,colUpBound,1):
+
+            oceanCellValue = oceanVar[ tstep, lay, row, col ]
+
+            if ( oceanCellValue == 0.0 ):
+                continue
+
+            else:
+                print('-> for row:%s, col:%s, zero replaced %s' %( row,col,oceanCellValue) )
+                oceanCellValue = 0.0
+print('-> end of program!')
+oceanFile.close()
