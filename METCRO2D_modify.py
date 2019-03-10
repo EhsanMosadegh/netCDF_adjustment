@@ -15,16 +15,17 @@ from shutil import copyfile
 #########################################################################################################
 
 yr = '16'
-favoriteValue = 0.1
 
 platformList =      [ 'MAC'         , 'HPC'         ]
 platform            = platformList[0]
 
-varFavoriteList =   [ 'LAI'         , 'PURB'        ]
 mcipFileList =      [ 'METCRO2D'    , 'GRIDCRO2D'   ]
 copyNameTagList =   [ '_LAIpoint1'  , '.PURBzero'   ]
+varOfInterestList = [ 'LAI'         , 'PURB'        ]
+favoriteValueList = [ 0.1           , 0.0           ]
 
-varFavorite         = varFavoriteList[1]
+favoriteValue       = favoriteValueList[1]
+varOfInterest       = varOfInterestList[1]
 mcipFileToAnalyze   = mcipFileList[1]
 copyNameTag         = copyNameTagList[1]
 
@@ -68,10 +69,10 @@ def modifyMcipFile ( copiedMcipFile ):
         # read the copied netcdf file
         mcipFile = Dataset( copiedMcipFile ,'r+')
 
-        varToModify = mcipFile.variables[ varFavorite ]
+        varToModify = mcipFile.variables[ varOfInterest ]
 
-        print('-> LAI dimensions are = ' , varToModify.dimensions )
-        print('-> size of each dim is = ' , varToModify.shape )
+        print('-> %s dimensions are = %s' %( varOfInterest , varToModify.dimensions ))
+        print('-> size of each dim is =' , (varToModify.shape ) )
 
         tstep_Ubound = varToModify.shape[0]
         lay_Ubound = varToModify.shape[1]
@@ -87,16 +88,27 @@ def modifyMcipFile ( copiedMcipFile ):
 
                     for colStep in range(0,col_Ubound,1):
 
-                        if ( varToModify[ timeStep , layerStep , rowStep , colStep ] == 0 ): # replace happens
+                        if ( mcipFileToAnalyze == 'METCRO2D' ) :
 
-                            #print( '-> there are zero valus at TSTEP=%s, LAY=%s, ROW=%s, COL=%s, and we will replace zero values with %s' %(timeStep,layerStep,rowStep,colStep,favoriteValue) )
+                            if ( varToModify[ timeStep , layerStep , rowStep , colStep ] == 0 ): # replace happens
 
-                            varToModify[ timeStep , layerStep , rowStep , colStep ] = favoriteValue
+                                #print( '-> there are zero valus at TSTEP=%s, LAY=%s, ROW=%s, COL=%s, and we will replace zero values with %s' %(timeStep,layerStep,rowStep,colStep,favoriteValue) )
 
-                        else:
+                                varToModify[ timeStep , layerStep , rowStep , colStep ] = favoriteValue
 
-                            	#print( '-> there was not any zero inside %s' %(inputFileName) )
-                             continue
+                            else:
+
+                                	#print( '-> there was not any zero inside %s' %(inputFileName) )
+                                 continue
+
+                        elif ( mcipFileToAnalyze == 'GRIDCRO2D' ) :
+
+                            if ( varToModify[ timeStep , layerStep , rowStep , colStep ] < favoriteValue ):
+
+                                varToModify[ timeStep , layerStep , rowStep , colStep ] = favoriteValue
+
+                            else:
+                                continue
         mcipFile.close()
 
 #########################################################################################################
@@ -104,23 +116,35 @@ def modifyMcipFile ( copiedMcipFile ):
 # QA to check if there is still zero:
 # select a subset of LAY array
 
-def qualityCheckMcipFileModified ( copiedMcipFile ):
+def QA4McipFileModified ( copiedMcipFile ):
 
         print('-> now perform QA to check if any zero is left...')
 
         mcipFile = Dataset( copiedMcipFile ,'r')
 
-        varToModify = mcipFile.variables[ varFavorite ]
+        varToModify = mcipFile.variables[ varOfInterest ]
 
-        LAI_array = np.array( varToModify[:,:,:,:] )
+        ncArray = np.array( varToModify[:,:,:,:] )
 
-        if ( np.amin(LAI_array) == 0 ) :
+        if ( mcipFileToAnalyze == 'METCRO2D' ) :
 
-            print( '-> ERROR: there are still zero valus in %s' %(inputFileName) )
+            if ( np.amin(ncArray) == 0.0 ) :
 
-        else:
+                print( '-> ERROR: there are still zero valus in %s' %(inputFileName) )
 
-            print( '-> no zero value found inside %s' %(inputFileName) )
+            else:
+
+                print( '-> no zero value found inside %s' %(inputFileName) )
+
+        elif ( mcipFileToAnalyze == 'GRIDCRO2D' ) :
+
+            if ( np.amin(ncArray) < 0.0 ) :
+
+                print( '-> ERROR: there are still bellow-zero valus for PURB in %s' %(inputFileName) )
+
+            else:
+
+                print( '-> no bellow-zero value found inside %s' %(inputFileName) )
 
         mcipFile.close()
 
@@ -169,7 +193,7 @@ for imonth in month_list :
 
                 modifyMcipFile( copiedMcipFile)
 
-                qualityCheckMcipFileModified ( copiedMcipFile)
+                QA4McipFileModified ( copiedMcipFile)
 
 
 
@@ -202,7 +226,7 @@ for imonth in month_list :
 
                 print('-> %s exists, and will be modified' %( inputFileName) )
 
-                print('-> copy the met file...')
+                print('-> copy MCIP file...')
 
                 copiedMcipFile = InputFileFullPath + copyNameTag
 
@@ -210,7 +234,7 @@ for imonth in month_list :
 
                 modifyMcipFile( copiedMcipFile)
 
-                qualityCheckMcipFileModified ( copiedMcipFile)
+                QA4McipFileModified ( copiedMcipFile)
 
     else:
 
