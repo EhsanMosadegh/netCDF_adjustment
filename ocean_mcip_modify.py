@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Mar  4 12:18:28 2019
+
 @author: ehsan (ehsanm@dri.edu)
-purpose: to modify GRID-CRO-2D and Ocean files
 """
 
 ##########
@@ -69,6 +69,6 @@ for listVar in ncVarList:
 
             else:
                 print('-> value for row:%s and col:%s is= %s' %( row, col, ncFileCellValue) )
-
+                
 print('-> end of program!')
 ncFile.close()
