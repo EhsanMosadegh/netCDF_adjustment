@@ -1,98 +1,43 @@
 #!/usr/bin/env python3
 
-########################################
+#########################################################################################################
 # created on: Jan 14, 2019
 #
 # author: ehsanm (ehsanm@dri.edu)
 # Purpose: to manipulate METCDRO2D values
-########################################
+#########################################################################################################
 
 from netCDF4 import Dataset
 import numpy as np
 import os
 from shutil import copyfile
 
-########################################
+#########################################################################################################
 
-platform = 'MAC' # [MAC, HPC]
-favorite_value = 0.1
-nc_variable = 'LAI'
 yr = '16'
-copyNameTag = '_LAIpoint1'
+favoriteValue = 0.1
 
-########################################
-# function
+platformList =      [ 'MAC'         , 'HPC'         ]
+platform            = platformList[0]
 
-def metcro2d_modify ( met_file_copied ):
+varFavoriteList =   [ 'LAI'         , 'PURB'        ]
+mcipFileList =      [ 'METCRO2D'    , 'GRIDCRO2D'   ]
+copyNameTagList =   [ '_LAIpoint1'  , '.PURBzero'   ]
 
-        # read the copied netcdf file
-        nc_file = Dataset( met_file_copied ,'r+')
+varFavorite         = varFavoriteList[1]
+mcipFileToAnalyze   = mcipFileList[1]
+copyNameTag         = copyNameTagList[1]
 
-        LAI_VAR = nc_file.variables[ nc_variable ]
-
-        print('-> LAI dimensions are = ' , LAI_VAR.dimensions )
-        print('-> size of each dim is = ' , LAI_VAR.shape )
-
-        tstep_Ubound = LAI_VAR.shape[0]
-        lay_Ubound = LAI_VAR.shape[1]
-        row_Ubound = LAI_VAR.shape[2]
-        col_Ubound = LAI_VAR.shape[3]
-
-
-        for itstep in range(0,tstep_Ubound,1):
-
-            for ilay in range(0,lay_Ubound,1):
-
-                for irow in range(0,row_Ubound,1):
-
-                    for icol in range(0,col_Ubound,1):
-
-                        if ( LAI_VAR[ itstep , ilay , irow , icol ] == 0 ):
-
-                            #print( '-> there are zero valus at TSTEP=%s, LAY=%s, ROW=%s, COL=%s, and we will replace zero values with %s' %(itstep,ilay,irow,icol,favorite_value) )
-
-                            LAI_VAR[ itstep , ilay , irow , icol ] = favorite_value
-
-                        #else:
-
-                            	#print( '-> there was not any zero inside %s' %(input_file_name) )
-        nc_file.close()
-
-########################################
-# function
-# QA to check if there is still zero:
-# select a subset of LAY array
-
-def metcro2d_QA ( met_file_copied ):
-
-        print('-> doing the QA to check if there is any zero left...')
-
-        nc_file = Dataset( met_file_copied ,'r')
-
-        LAI_VAR = nc_file.variables[ nc_variable ]
-
-        LAI_array = np.array( LAI_VAR[:,:,:,:] )
-
-        if ( np.amin(LAI_array) == 0 ) :
-
-        	print( '-> ERROR: there are still zero valus in %s' %(input_file_name) )
-
-        else:
-
-        	print( '-> no zero value found inside %s' %(input_file_name) )
-
-        nc_file.close()
-
-########################################
+#########################################################################################################
 # set paths
 
 if ( platform == 'MAC') :
 
-    work_dir = '/Users/ehsan/Documents/Python_projects/netCDF_modify'
+    work_dir = '/Users/ehsan/Documents/Python_projects/netCDF_modify/'
     repository_name = 'netCDF_adjustment'
     script_dir = work_dir+'github/'+repository_name
-    input_dir = work_dir+'/inputs/'
-    output_dir = work_dir+'/outputs/METCRO2D_output/'
+    input_dir = work_dir+'inputs/'
+    output_dir = work_dir+'outputs/mcipFileToAnalyzeoutput/'
 
 elif ( platform == 'HPC') :
 
@@ -113,7 +58,73 @@ print('-> current directory is: "%s"' %(os.getcwd()) )
 #print('-> now we are at:')
 #print('-> %s' %( os.getcwd() ))
 
-########################################
+#########################################################################################################
+# function
+
+def modifyMcipFile ( copiedMcipFile ):
+
+        print('-> start modify MCIP file...')
+
+        # read the copied netcdf file
+        mcipFile = Dataset( copiedMcipFile ,'r+')
+
+        varToModify = mcipFile.variables[ varFavorite ]
+
+        print('-> LAI dimensions are = ' , varToModify.dimensions )
+        print('-> size of each dim is = ' , varToModify.shape )
+
+        tstep_Ubound = varToModify.shape[0]
+        lay_Ubound = varToModify.shape[1]
+        row_Ubound = varToModify.shape[2]
+        col_Ubound = varToModify.shape[3]
+
+
+        for timeStep in range(0,tstep_Ubound,1):
+
+            for layerStep in range(0,lay_Ubound,1):
+
+                for rowStep in range(0,row_Ubound,1):
+
+                    for colStep in range(0,col_Ubound,1):
+
+                        if ( varToModify[ timeStep , layerStep , rowStep , colStep ] == 0 ): # replace happens
+
+                            #print( '-> there are zero valus at TSTEP=%s, LAY=%s, ROW=%s, COL=%s, and we will replace zero values with %s' %(timeStep,layerStep,rowStep,colStep,favoriteValue) )
+
+                            varToModify[ timeStep , layerStep , rowStep , colStep ] = favoriteValue
+
+                        else:
+
+                            	#print( '-> there was not any zero inside %s' %(inputFileName) )
+                             continue
+        mcipFile.close()
+
+#########################################################################################################
+# function
+# QA to check if there is still zero:
+# select a subset of LAY array
+
+def qualityCheckMcipFileModified ( copiedMcipFile ):
+
+        print('-> now perform QA to check if any zero is left...')
+
+        mcipFile = Dataset( copiedMcipFile ,'r')
+
+        varToModify = mcipFile.variables[ varFavorite ]
+
+        LAI_array = np.array( varToModify[:,:,:,:] )
+
+        if ( np.amin(LAI_array) == 0 ) :
+
+            print( '-> ERROR: there are still zero valus in %s' %(inputFileName) )
+
+        else:
+
+            print( '-> no zero value found inside %s' %(inputFileName) )
+
+        mcipFile.close()
+
+#########################################################################################################
 
 month_list = [ '07' , '08' , '09' , '10' , '11' ]
 
@@ -135,30 +146,30 @@ for imonth in month_list :
 
             date_tag = yr+imonth+iday
 
-            input_file_name = 'METCRO2D_'+date_tag
+            inputFileName = mcipFileToAnalyze+'_'+date_tag
 
-            print('===> processing file: %s' %input_file_name)
+            print('===> processing file: %s' %inputFileName)
 
-            input_file_full_path = os.path.join( input_dir , input_file_name )
+            InputFileFullPath = os.path.join( input_dir , inputFileName )
 
-            if ( os.path.isfile(input_file_full_path) == False ):
+            if ( os.path.isfile(InputFileFullPath) == False ):
 
-                print('-> %s NOT available, go to the next file' %(input_file_name) )
+                print('-> %s NOT in input directory, go to the next file' %(inputFileName) )
                 continue
 
             else:
 
-                print('-> %s exists, and will be modified' %( input_file_name) )
+                print('-> %s exists, and will be modified' %( inputFileName) )
 
                 print('-> copy the met file...')
 
-                met_file_copied = input_file_full_path + copyNameTag
+                copiedMcipFile = InputFileFullPath + copyNameTag
 
-                copyfile( input_file_full_path , met_file_copied )
+                copyfile( InputFileFullPath , copiedMcipFile )
 
-                metcro2d_modify( met_file_copied)
+                modifyMcipFile( copiedMcipFile)
 
-                metcro2d_QA ( met_file_copied)
+                qualityCheckMcipFileModified ( copiedMcipFile)
 
 
 
@@ -176,30 +187,30 @@ for imonth in month_list :
 
             date_tag = yr+imonth+iday
 
-            input_file_name = 'METCRO2D_'+date_tag
+            inputFileName = mcipFileToAnalyze+'_'+date_tag
 
-            print('===> processing file: %s' %input_file_name)
+            print('===> processing file: %s' %inputFileName)
 
-            input_file_full_path = os.path.join( input_dir , input_file_name )
+            InputFileFullPath = os.path.join( input_dir , inputFileName )
 
-            if ( os.path.isfile(input_file_full_path) == False ):
+            if ( os.path.isfile(InputFileFullPath) == False ):
 
-                print('-> %s NOT available, go to the next file' %(input_file_name) )
+                print('-> %s NOT available, go to the next file' %(inputFileName) )
                 continue
 
             else:
 
-                print('-> %s exists, and will be modified' %( input_file_name) )
+                print('-> %s exists, and will be modified' %( inputFileName) )
 
                 print('-> copy the met file...')
 
-                met_file_copied = input_file_full_path + copyNameTag
+                copiedMcipFile = InputFileFullPath + copyNameTag
 
-                copyfile( input_file_full_path , met_file_copied )
+                copyfile( InputFileFullPath , copiedMcipFile )
 
-                metcro2d_modify( met_file_copied)
+                modifyMcipFile( copiedMcipFile)
 
-                metcro2d_QA ( met_file_copied)
+                qualityCheckMcipFileModified ( copiedMcipFile)
 
     else:
 
